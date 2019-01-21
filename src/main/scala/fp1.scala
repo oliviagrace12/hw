@@ -1,3 +1,4 @@
+
 // GENERATED
 /* INSTRUCTIONS
  *
@@ -136,7 +137,8 @@ object fp1 {
   def max (xs : List[Int]) : Int = {
     xs match {
       case Nil => throw new NoSuchElementException
-      case y::ys =>
+      case y::Nil => y
+      case y::ys => y max max(ys)
     }
   }
 
@@ -145,8 +147,10 @@ object fp1 {
   // maximum of a list of integers.  You must not alter the definition of "maxTail".  Your
   // definition for "maxTailAux" must be recursive and not use while loops.
   def maxTailAux (accumulator : Int, xs : List[Int]) : Int = {
-    // TODO: Provide definition here.
-    -1
+    xs match {
+      case Nil => accumulator
+      case y::ys => maxTailAux(y max accumulator, ys)
+    }
   }
 
   def maxTail (xs : List[Int]) : Int = {
@@ -160,8 +164,11 @@ object fp1 {
   // "start" and "end" and produces a "List[Int]" that counts DOWN from "start" to "end" (inclusive
   // at both ends) one at a time.  If "start < end", the empty list must be returned.
   def otpu (start : Int, end : Int) : List[Int] = {
-    // TODO: Provide definition here.
-    null
+    optuAux(start, end, List())
+  }
+
+  def optuAux (start: Int, end: Int, acc: List[Int]) : List[Int] = {
+    if (start < end) acc else optuAux(start-1, end, acc ::: List(start))
   }
 }
 
