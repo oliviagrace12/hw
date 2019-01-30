@@ -32,12 +32,13 @@
 object fp1 {
 
   // EXAMPLE: here is the definition of the factorial function.
-  def fact (n : Int) : Int = {
-    if (n <= 1) 
+  def fact(n: Int): Int = {
+    if (n <= 1)
       1
-    else 
-      n * fact (n - 1)
+    else
+      n * fact(n - 1)
   }
+
   // Note that the fact computes as follows (leaving out some steps):
   //
   // fact (5)
@@ -68,30 +69,30 @@ object fp1 {
   // EXERCISE 1: complete the following definition, so that factTest is the list of integers
   // List(1,2,6,24,120).  You must call the "fact" function (five times) defined above instead of
   // hardcoding the numbers 1,2,6,24,120.
-  val factTest : List[Int] = {
-    List (fact (1), fact (2), fact (3), fact (4), fact (5))
+  val factTest: List[Int] = {
+    List(fact(1), fact(2), fact(3), fact(4), fact(5))
   }
 
   // EXERCISE 2: complete the following definition of the Fibonacci function.
-  def fib (n : Int) : Int = {
+  def fib(n: Int): Int = {
     n match {
       case 0 => 0
       case 1 => 1
       case 2 => 1
-      case _ => fib(n-1) + fib(n - 2)
+      case _ => fib(n - 1) + fib(n - 2)
     }
   }
 
-  
+
   // EXERCISE 3: declare the identifier "p1" with a pair consisting of the Int 7 and the String
   // "hello"
-  val p1 : (Int, String) = {
+  val p1: (Int, String) = {
     (7, "hello")
   }
 
   // EXERCISE 4: declare the identifier "t1" with a triple consisting of the Int 7, the String
   // "hello", and the Boolean false
-  val t1 : (Int, String, Boolean) = {
+  val t1: (Int, String, Boolean) = {
     (7, "hello", false)
   }
 
@@ -99,17 +100,17 @@ object fp1 {
   // pair of a String and an Int (with the values from the pair passed an argument.  E.g., swap (p1)
   // should return ("hello", 7).  You can use "p._1" and "p._2" to access the first and second
   // components of a pair.
-  def swap (p:(Int,String)) : (String,Int) = {
+  def swap(p: (Int, String)): (String, Int) = {
     (p._2, p._1)
   }
 
   // EXERCISE 6: write a function "sum" that takes a list of integers and sums them.  As with all of
   // the exercises in this assignment, your function MUST be recursive and MUST NOT use a while
   // loop.
-  def sum (xs : List[Int]) : Int = {
+  def sum(xs: List[Int]): Int = {
     xs match {
       case Nil => 0
-      case y::ys => y + sum(ys)
+      case y :: ys => y + sum(ys)
     }
   }
 
@@ -118,14 +119,14 @@ object fp1 {
   // definition of the function "sumTail" so that it also sums a list of integers.  You
   // must not alter the definition of "sumTailAux".  Your definition for "sumTail"
   // must call "sumTailAux" directly, and must not call "sum"
-  def sumTailAux (accumulator : Int, xs : List[Int]) : Int = {
+  def sumTailAux(accumulator: Int, xs: List[Int]): Int = {
     xs match {
       case Nil => accumulator
-      case y::ys => sumTailAux (accumulator + y, ys)
+      case y :: ys => sumTailAux(accumulator + y, ys)
     }
   }
 
-  def sumTail (xs : List[Int]) : Int = {
+  def sumTail(xs: List[Int]): Int = {
     sumTailAux(0, xs)
   }
 
@@ -134,11 +135,11 @@ object fp1 {
   // integer in a list of integers.  Note that no value can be returned when the list is empty,
   // hence the "NoSuchElementException".  Your function MUST be recursive and MUST NOT use a while
   // loop.  You MUST NOT use the "max" method on lists, but can use the "max" method on integers.
-  def max (xs : List[Int]) : Int = {
+  def max(xs: List[Int]): Int = {
     xs match {
       case Nil => throw new NoSuchElementException
-      case y::Nil => y
-      case y::ys => y max max(ys)
+      case y :: Nil => y
+      case y :: ys => y max max(ys)
     }
   }
 
@@ -146,29 +147,37 @@ object fp1 {
   // definition of the function "maxTailAux" so that "maxTail" also finds the
   // maximum of a list of integers.  You must not alter the definition of "maxTail".  Your
   // definition for "maxTailAux" must be recursive and not use while loops.
-  def maxTailAux (accumulator : Int, xs : List[Int]) : Int = {
+  def maxTailAux(accumulator: Int, xs: List[Int]): Int = {
     xs match {
       case Nil => accumulator
-      case y::ys => maxTailAux(y max accumulator, ys)
+      case y :: ys => maxTailAux(y max accumulator, ys)
     }
   }
 
-  def maxTail (xs : List[Int]) : Int = {
+  def maxTail(xs: List[Int]): Int = {
     xs match {
       case Nil => throw new java.util.NoSuchElementException
-      case y::ys => maxTailAux (y, ys)
+      case y :: ys => maxTailAux(y, ys)
     }
   }
 
   // EXERCISE 10: Write a recursive function "otpu" ("upto" backwards) that takes two Int parameters
   // "start" and "end" and produces a "List[Int]" that counts DOWN from "start" to "end" (inclusive
   // at both ends) one at a time.  If "start < end", the empty list must be returned.
-  def otpu (start : Int, end : Int) : List[Int] = {
+  def otpu(start: Int, end: Int): List[Int] = {
     optuAux(start, end, List())
   }
 
-  def optuAux (start: Int, end: Int, acc: List[Int]) : List[Int] = {
-    if (start < end) acc else optuAux(start-1, end, acc ::: List(start))
+  def optuAux(start: Int, end: Int, acc: List[Int]): List[Int] = {
+    if (start < end) acc else optuAux(start - 1, end, acc ::: List(start))
+  }
+
+  def printCounter(list: List[String]) : Unit = list match {
+    case Nil => Unit
+    case y :: Nil => println(y)
+    case y :: ys =>
+      println(y)
+      printCounter(ys)
   }
 }
 

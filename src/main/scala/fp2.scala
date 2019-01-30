@@ -34,16 +34,22 @@ object fp2 {
   // for Scala's builtin List type.  You must not use the builtin "map" method.
   // Your implementation of "map" MUST be recursive.
   def map [A,B] (xs:List[A], f:A=>B) : List[B] = {
-    // TODO: Provide definition here.
-    null
+    xs match {
+      case Nil => Nil
+      case y::Nil => f(y)::Nil
+      case y::ys => f(y)::map(ys, f)
+    }
   }
 
   // EXERCISE 2: complete the following recursive definition of a "filter" function
   // for Scala's builtin List type.  You must not use the builtin "filter" method.
   // Your implementation of "filter" MUST be recursive.
   def filter [A] (xs:List[A], f:A=>Boolean) : List[A] = {
-    // TODO: Provide definition here.
-    null
+    xs match {
+      case Nil => Nil
+      case y::Nil => if (f(y)) y::Nil else Nil
+      case y::ys => if (f(y)) y::filter(ys, f) else filter(ys, f)
+    }
   }
 
   // EXERCISE 3: complete the following recursive definition of an "append" function
@@ -51,8 +57,16 @@ object fp2 {
   // Your implementation of "append" MUST be recursive.
   // HINT: use "::" in the body of the cons-cell case.
   def append [A] (xs:List[A], ys:List[A]) : List[A] = {
-    // TODO: Provide definition here.
-    null
+    (xs, ys) match {
+      case (Nil, Nil) => Nil
+      case (Nil, _) => ys
+      case (_, Nil) => xs
+      case (as,cs) => as match {
+        case Nil => Nil
+        case b::Nil => b::cs
+        case b::bs => b::append(bs, cs)
+      }
+    }
   }
 
   // EXERCISE 4: complete the following recursive definition of a "flatten" function
@@ -62,8 +76,11 @@ object fp2 {
   // EXAMPLE:
   // - flatten (List ((1 to 5).toList, (6 to 10).toList, (11 to 15).toList)) == (1 to 15).toList
   def flatten [A] (xss:List[List[A]]) : List[A] = {
-    // TODO: Provide definition here.
-    null
+    xss match {
+      case Nil => Nil
+      case ys::Nil => ys
+      case ys::yss => ys:::flatten(yss)
+    }
   }
 
   // EXERCISE 5: complete the following recursive definition of a "foldLeft" function
@@ -72,8 +89,11 @@ object fp2 {
   // HINT:   foldLeft (  Nil, e, f) == e
   //         foldLeft (y::ys, e, f) == foldLeft (ys, f (e, y), f)
   def foldLeft [A,B] (xs:List[A], e:B, f:(B,A)=>B) : B = {
-    // TODO: Provide definition here.
-    e
+    xs match {
+      case Nil => e
+      case y::Nil => f(e,y)
+      case y::ys => foldLeft(ys, f(e,y), f)
+    }
   }
 
   // EXERCISE 6: complete the following recursive definition of a "foldRight" function
@@ -82,8 +102,11 @@ object fp2 {
   // HINT:   foldRight (  Nil, e, f) == e
   //         foldRight (y::ys, e, f) == f (y, foldRight (ys, e, f))
   def foldRight [A,B] (xs:List[A], e:B, f:(A,B)=>B) : B = {
-    // TODO: Provide definition here.
-    e
+    xs match {
+      case Nil => e
+      case y::Nil => f(y,e)
+      case y::ys => f(y, foldRight(ys, e, f))
+    }
   }
 
   // EXERCISE 7: complete the following definition of a "joinTerminateRight" function
@@ -94,8 +117,7 @@ object fp2 {
   // - joinTerminateRight (List ("a"), ";") == "a;"
   // - joinTerminateRight (List ("a","b","c","d"), ";") == "a;b;c;d;"
   def joinTerminateRight (xs : List[String], term : String) : String = {
-    // TODO: Provide definition here.
-    null
+    foldRight(xs, "", (e: String, s: String) => e + term + s)
   }
 
   // EXERCISE 8: complete the following definition of a "joinTerminateLeft" function
@@ -106,8 +128,7 @@ object fp2 {
   // - joinTerminateLeft (List ("a"), ";") == "a;"
   // - joinTerminateLeft (List ("a","b","c","d"), ";") == "a;b;c;d;"
   def joinTerminateLeft (xs : List[String], term : String) : String = {
-    // TODO: Provide definition here.
-    null
+    foldLeft(xs, "",(s: String, e: String) => s + e + term)
   }
 
   // EXERCISE 9: complete the following recursive definition of a "firstNumGreaterThan" function
@@ -118,8 +139,11 @@ object fp2 {
   // EXAMPLES:
   // - firstNumGreaterThan (5, List (4, 6, 8, 5)) == 6
   def firstNumGreaterThan (a : Int, xs : List[Int]) : Int = {
-    // TODO: Provide definition here.
-    -1
+    xs match {
+      case Nil => throw new NoSuchElementException
+      case y::Nil => if (y >= a) y else throw new NoSuchElementException
+      case y::ys => if (y >= a) y else firstNumGreaterThan(a, ys)
+    }
   }
 
   // EXERCISE 10: complete the following recursive definition of a "firstIndexNumGreaterThan" function
@@ -132,8 +156,15 @@ object fp2 {
   // - firstIndexNumGreaterThan (5, List (4, 6, 8, 5)) == 1
   // HINT: this is a bit easier to write if you use an auxiliary function.
   def firstIndexNumGreaterThan (a : Int, xs : List[Int]) : Int = {
-    // TODO: Provide definition here.
-    -1
+    aux(a, xs, 0)
+  }
+
+  def aux (a : Int, xs : List[Int], index: Int) : Int = {
+    xs match {
+      case Nil => throw new NoSuchElementException
+      case y::Nil => if (y >= a) index else throw new NoSuchElementException
+      case y::ys => if (y >= a) index else aux(a, ys, index + 1)
+    }
   }
 }
 
