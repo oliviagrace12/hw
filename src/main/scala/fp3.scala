@@ -36,9 +36,11 @@ object fp3 {
   // EXAMPLES: 
   // - member (5, List (4, 6, 8, 5)) == true
   // - member (3, List (4, 6, 8, 5)) == false
-  def member (a : Int, xs : List[Int]) : Boolean = {
-    // TODO: Provide definition here.
-    false
+  def member(a: Int, xs: List[Int]): Boolean = {
+    xs match {
+      case Nil => false
+      case y :: ys => if (y == a) true else member(a, ys)
+    }
   }
 
   // EXERCISE 2: complete the following recursive definition of an "allEqual" function
@@ -50,9 +52,12 @@ object fp3 {
   // - allEqual (List (6, 5, 5, 5)) == false
   // - allEqual (List (5, 5, 6, 5)) == false
   // - allEqual (List (5, 5, 5, 6)) == false
-  def allEqual (xs : List[Int]) : Boolean = {
-    // TODO: Provide definition here.
-    false
+  def allEqual(xs: List[Int]): Boolean = {
+    xs match {
+      case Nil => true
+      case y :: Nil => true
+      case y :: ys => if (y == ys.head) allEqual(ys) else false
+    }
   }
 
   // EXERCISE 3: complete the definition of the following function that computes the length of
@@ -63,9 +68,8 @@ object fp3 {
   //
   // You must not use recursion directly in the function.  You can use the "map" method 
   // of the List class.
-  def stringLengths (xs:List[String]) : List[(String, Int)] = {
-    // TODO: Provide definition here.
-    null
+  def stringLengths(xs: List[String]): List[(String, Int)] = {
+    xs.map(s => (s, s.length))
   }
 
   // EXERCISE 4: complete the function definition for "delete1" that takes
@@ -74,26 +78,26 @@ object fp3 {
   // "delete1" MUST be recursive.
   // EXAMPLE:
   // - delete1 ("the", List ("the","the","was","a","product","of","the","1980s")) == List ("was","a","product","of","1980s")
-  def delete1 [X] (x:X, ys:List[X]) : List[X] = {
-    // TODO: Provide definition here.
-    null
+  def delete1[X](x: X, ys: List[X]): List[X] = {
+    ys match {
+      case Nil => Nil
+      case z :: zs => if (x == z) delete1(x, zs) else z :: delete1(x, zs)
+    }
   }
 
 
   // EXERCISE 5: complete the function definition for "delete2" below.  It must 
   // have the same behavior as "delete1".  It must be written using "for comprehensions" 
   // and not use recursion explicitly.
-  def delete2 [X] (x:X, ys:List[X]) : List[X] = {
-    // TODO: Provide definition here.
-    null
+  def delete2[X](x: X, ys: List[X]): List[X] = {
+    for (y <- ys if y != x) yield y
   }
 
   // EXERCISE 6: complete the function definition for "delete3" below.  It must 
   // have the same behavior as "delete1".  It must be written using the
   // builtin "filter" method for Lists and not use recursion explicitly.
-  def delete3 [X] (x:X, ys:List[X]) : List[X] = {
-    // TODO: Provide definition here.
-    null
+  def delete3[X](x: X, ys: List[X]): List[X] = {
+    ys.filter(_ != x)
   }
 
   // EXERCISE 7: complete the function definition for "removeDupes1" below.
@@ -103,11 +107,13 @@ object fp3 {
   // element should be left alone.
   // EXAMPLE:
   // - removeDupes1 (List (1,1,2,3,3,3,4,4,5,6,7,7,8,9,2,2,2,9)) == List (1,2,3,4,5,6,7,8,9,2,9)
-  def removeDupes1 [X] (xs:List[X]) : List[X] = {
-    // TODO: Provide definition here.
-    null
+  def removeDupes1[X](xs: List[X]): List[X] = {
+    xs match {
+      case Nil => Nil
+      case y :: Nil => y :: Nil
+      case y :: ys => if (y == ys.head) removeDupes1(ys) else y :: removeDupes1(ys)
+    }
   }
-
 
 
   // EXERCISE 8: write a function "removeDupes2" that behaves like "removeDupes1",
@@ -117,11 +123,18 @@ object fp3 {
   // list.
   // EXAMPLE:
   // - removeDupes2 (List (1,1,2,3,3,3,4,4,5,6,7,7,8,9,2,2,2,9)) == List ((2,1),(1,2),(3,3),(2,4),(1,5),(1,6),(2,7),(1,8),(1,9),(3,2),(1,9))
-  def removeDupes2 [X] (xs:List[X]) : List[(Int, X)] = {
-    // TODO: Provide definition here.
-    null
+  def removeDupes2[X](xs: List[X]): List[(Int, X)] = {
+//    val numAndList = getNum(xs, 1)
+//    numAndList._2
+    Nil
   }
 
+  def getNum[X](xs: List[X], n: Int): (Int, List[X]) = {
+    xs match {
+      case Nil => (0, Nil)
+      case y::ys => if (y == ys.head) getNum(ys, n + 1) else (1, ys)
+    }
+  }
 
 
   // EXERCISE 9: complete the following definition of a function that splits a list
@@ -138,9 +151,18 @@ object fp3 {
   // you cannot define your own versions of "take"/"drop" and use them
   // (because that would entail one traversal of the list with "take"
   // and then a second traversal with "drop").
-  def splitAt [X] (n:Int, xs:List[X]) : (List[X], List[X]) = {
-    // TODO: Provide definition here.
-    null
+  def splitAt[X](n: Int, xs: List[X]): (List[X], List[X]) = {
+    (Nil, Nil)
+  }
+
+  def splitAtAux[X](n: Int, xs: List[X]): List[X] = {
+//    xs match {
+//      case Nil => Nil
+//      case y :: ys =>
+//        if (n > 0)
+//          List(y) :::
+//    }
+    Nil
   }
 
 
@@ -152,9 +174,11 @@ object fp3 {
   // - allDistinct (List (1,2,3,4,5)) == true
   // - allDistinct (List (1,2,3,4,5,1)) == false
   // - allDistinct (List (1,2,3,2,4,5)) == false
-  def allDistinct (xs : List[Int]) : Boolean = {
-    // TODO: Provide definition here.
-    false
+  def allDistinct(xs: List[Int]): Boolean = {
+    xs match {
+      case Nil => true
+      case y :: ys => if (member(y, ys)) false else allDistinct(ys)
+    }
   }
 }
 
