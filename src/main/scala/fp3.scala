@@ -124,18 +124,17 @@ object fp3 {
   // EXAMPLE:
   // - removeDupes2 (List (1,1,2,3,3,3,4,4,5,6,7,7,8,9,2,2,2,9)) == List ((2,1),(1,2),(3,3),(2,4),(1,5),(1,6),(2,7),(1,8),(1,9),(3,2),(1,9))
   def removeDupes2[X](xs: List[X]): List[(Int, X)] = {
-//    val numAndList = getNum(xs, 1)
-//    numAndList._2
-    Nil
-  }
-
-  def getNum[X](xs: List[X], n: Int): (Int, List[X]) = {
     xs match {
-      case Nil => (0, Nil)
-      case y::ys => if (y == ys.head) getNum(ys, n + 1) else (1, ys)
+      case Nil => Nil
+      case y :: Nil => (1, y) :: Nil
+      case y :: ys =>
+        val list = removeDupes2(ys)
+        if (y == list.head._2)
+          (list.head._1 + 1, y) :: list.tail
+        else
+          (1, y) :: list
     }
   }
-
 
   // EXERCISE 9: complete the following definition of a function that splits a list
   // into a pair of two lists.  The offset for the the split position is given
@@ -152,19 +151,16 @@ object fp3 {
   // (because that would entail one traversal of the list with "take"
   // and then a second traversal with "drop").
   def splitAt[X](n: Int, xs: List[X]): (List[X], List[X]) = {
-    (Nil, Nil)
+    xs match {
+      case Nil => (Nil, Nil)
+      case y :: ys =>
+        val (as, bs) = splitAt(n - 1, ys)
+        if (n > 0)
+          (y :: as, bs)
+        else
+          (as, y :: bs)
+    }
   }
-
-  def splitAtAux[X](n: Int, xs: List[X]): List[X] = {
-//    xs match {
-//      case Nil => Nil
-//      case y :: ys =>
-//        if (n > 0)
-//          List(y) :::
-//    }
-    Nil
-  }
-
 
   // EXERCISE 10: complete the following definition of an "allDistinct" function that checks
   // whether all values in list are distinct.  You should use your "member" function defined earlier.
