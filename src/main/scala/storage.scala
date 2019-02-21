@@ -34,34 +34,40 @@ object storage {
 
   // EXERCISE 1: Complete the following definition, so that "constant5" is a function that returns 5
   // whenever it is invoked.
-  val constant5 : () => Int = {
-    // TODO: Complete the definition.
-    null
+  val constant5: () => Int = {
+    () => 5
   }
 
   // EXERCISE 2: Complete the following definition, so that "constant" is a function that when
   // invoked with integer n returns a function that returns n whenever it is invoked.
-  val constant : Int => () => Int = {
-    // TODO: Complete the definition.
-    null
+  val constant: Int => () => Int = {
+    n: Int => () => n
   }
 
   // EXERCISE 3: Complete the following definition, so that "counter0" is a (stateful) function that
   // returns 0 when it is first invoked, then 1, then 2, etc.  
   // REMEMBER: you can use "var" but everything you add has to be inside the "{...}" body of "counter0".
   // This rule applies throughout this assignment.
-  val counter0 : () => Int = {
-    // TODO: Complete the definition.
-    null
+  val counter0: () => Int = {
+    var x = -1
+    () => {
+      x = x + 1;
+      x
+    }
   }
 
   // EXERCISE 4: Complete the following definition, so that "counter" is a (stateless) function that
   // when invoked with integer n returns a (stateful) function that returns n when it is first
   // invoked, then n+1, then n+2, etc.  The counters must be independent, i.e., running "counter (0)" 
   // twice should yield two functions that do not interfere with one another's state.
-  val counter : Int => () => Int = {
-    // TODO: Complete the definition.
-    null
+  val counter: Int => () => Int = {
+    n: Int => {
+      var x = n - 1;
+      () => {
+        x = x + 1;
+        x
+      }
+    }
   }
 
   // EXERCISE 5: Complete the following definition, so that "getAndSet" is a (stateless) function
@@ -71,9 +77,11 @@ object storage {
   // following expression should return 10: { val (get, set) = getAndSet (5); set (10); get () } 
   // Multiple calls to "getAndSet" should yield independent pairs, i.e., the first pair returned 
   // should not share any state with the second pair returned.
-  val getAndSet : Int => (() => Int, Int => Unit) = {
-    // TODO: Complete the definition.
-    null
+  val getAndSet: Int => (() => Int, Int => Unit) = {
+    n: Int => {
+      var x = n;
+      (() => x, (y: Int) => x = y)
+    }
   }
 
   // EXERCISE 6: Complete the following definition, so that "getAndSetSpy" is a (stateful) function
@@ -82,9 +90,18 @@ object storage {
   // function that, when invoked, returns the total number of times that a "set" call has been made.
   // That number should cover all calls to "set" made in all pairs created via "getAndSetSpy".  That is,
   // the total number is a piece of state shared all "set" functions created via "getAndSetSpy".
-  val getAndSetSpy : () => (() => Int, Int => (() => Int, Int => Unit)) = {
-      // TODO: Complete the definition.
-      null
+  val getAndSetSpy: () => (() => Int, Int => (() => Int, Int => Unit)) = {
+    var count = 0
+    () => {
+      (
+        () => count,
+        (n: Int) => {
+          count = count + 1
+          var x = n
+          (() => x, (y: Int) => x = y)
+        }
+      )
+    }
   }
 
 }
