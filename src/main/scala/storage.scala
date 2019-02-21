@@ -50,10 +50,7 @@ object storage {
   // This rule applies throughout this assignment.
   val counter0: () => Int = {
     var x = -1
-    () => {
-      x = x + 1;
-      x
-    }
+    () => {x = x + 1; x}
   }
 
   // EXERCISE 4: Complete the following definition, so that "counter" is a (stateless) function that
@@ -62,11 +59,8 @@ object storage {
   // twice should yield two functions that do not interfere with one another's state.
   val counter: Int => () => Int = {
     n: Int => {
-      var x = n - 1;
-      () => {
-        x = x + 1;
-        x
-      }
+      var x = n - 1
+      () => {x = x + 1; x}
     }
   }
 
@@ -79,7 +73,7 @@ object storage {
   // should not share any state with the second pair returned.
   val getAndSet: Int => (() => Int, Int => Unit) = {
     n: Int => {
-      var x = n;
+      var x = n
       (() => x, (y: Int) => x = y)
     }
   }
