@@ -96,9 +96,8 @@ object storage {
       (
         () => count,
         (n: Int) => {
-          count = count + 1
           var x = n
-          (() => x, (y: Int) => x = y)
+          (() => x, (y: Int) => {count = count + 1; x = y})
         }
       )
     }
